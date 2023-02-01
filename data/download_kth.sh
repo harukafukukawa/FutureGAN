@@ -2,12 +2,12 @@
 mkdir ./kth
 cd ./kth
 
-wget http://www.nada.kth.se/cvap/actions/walking.zip
-wget http://www.nada.kth.se/cvap/actions/jogging.zip
-wget http://www.nada.kth.se/cvap/actions/running.zip
-wget http://www.nada.kth.se/cvap/actions/boxing.zip
-wget http://www.nada.kth.se/cvap/actions/handwaving.zip
-wget http://www.nada.kth.se/cvap/actions/handclapping.zip
+wget http://www.csc.kth.se/cvap/actions/walking.zip
+wget http://www.csc.kth.se/cvap/actions/jogging.zip
+wget http://www.csc.kth.se/cvap/actions/running.zip
+wget http://www.csc.kth.se/cvap/actions/boxing.zip
+wget http://www.csc.kth.se/cvap/actions/handwaving.zip
+wget http://www.csc.kth.se/cvap/actions/handclapping.zip
 
 unzip walking.zip -d walking
 unzip jogging.zip -d jogging
