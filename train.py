@@ -477,7 +477,7 @@ class Trainer:
         self.video_loader = video_loader
         self.transform_video = transforms.Compose([transforms.Resize(size=(self.img_size,self.img_size), interpolation=Image.NEAREST), transforms.ToTensor(),])
         self.dataset = VideoFolder(video_root=self.train_data_root, video_ext=self.ext, nframes=self.nframes, loader=self.video_loader, transform=self.transform_video)
-        self.dataloader = DataLoader(dataset=self.dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.nworkers)
+        self.dataloader = DataLoader(dataset=self.dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.nworkers, generator=torch.Generator(device='cuda'))
         self.epoch_tick = int(ceil(len(self.dataset)/self.batch_size))
 
         # define tensors
