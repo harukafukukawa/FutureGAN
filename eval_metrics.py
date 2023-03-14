@@ -6,7 +6,7 @@ import math
 import numpy as np
 from scipy import signal, linalg
 from scipy.stats import entropy
-from skimage.measure import compare_psnr, compare_ssim, compare_mse
+from skimage.metrics import peak_signal_noise_ratio, structural_similarity, mean_squared_error
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -32,7 +32,7 @@ def calculate_mse(img_gen, img_gt):
     img_gt = img_gt.cpu()
     img_gt = img_gt.data.numpy()
 
-    mse = compare_mse(img_gt, img_gen)
+    mse = mean_squared_error(img_gt, img_gen)
     return mse
 
 
@@ -51,7 +51,7 @@ def calculate_psnr(img_gen, img_gt):
     img_gen = img_gen.data.cpu().numpy()
     img_gt = img_gt.data.cpu().numpy()
 
-    psnr = compare_psnr(img_gt, img_gen)
+    psnr = peak_signal_noise_ratio(img_gt, img_gen)
     return psnr
 
 
@@ -69,7 +69,7 @@ def calculate_ssim(img_gen, img_gt):
     img_gen = img_gen.data.cpu().numpy()
     img_gt = img_gt.data.cpu().numpy()
 
-    ssim = compare_ssim(img_gen, img_gt, multichannel=True)
+    ssim = structural_similarity(img_gen, img_gt, multichannel=True)
     return ssim
 
 

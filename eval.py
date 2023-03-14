@@ -118,9 +118,15 @@ def evaluate_pred(config):
 
     test_data_root = config.data_root
     if config.deep_pred>1:
-        test_dir = config.test_dir+'/'+config.experiment_name+'/deep-pred{}/'.format(config.deep_pred)+model_name
+        if config.experiment_name:
+            test_dir = config.test_dir+'/'+config.experiment_name+'/deep-pred{}/'.format(config.deep_pred)+model_name
+        else:
+            test_dir = config.test_dir+config.experiment_name+'/deep-pred{}/'.format(config.deep_pred)+model_name
     else:
-        test_dir = config.test_dir+'/'+config.experiment_name+'/pred/'+model_name
+        if config.experiment_name:
+            test_dir = config.test_dir+'/'+config.experiment_name+'/pred/'+model_name
+        else:
+            test_dir = config.test_dir+config.experiment_name+'/pred/'+model_name
     if not os.path.exists(test_dir):
             os.makedirs(test_dir)
     sample_dir = test_dir+'/samples'
@@ -141,7 +147,10 @@ def evaluate_pred(config):
         # load model parameters
         G.load_state_dict(ckpt['state_dict'])
         G.eval()
-        G = G.module.model
+        try:
+            G = G.module.model
+        except:
+            G = G.model
         if use_cuda:
             G = G.cuda()
         print(' ... loading FutureGAN`s FutureGenerator from checkpoint: {}'.format(config.model_path))

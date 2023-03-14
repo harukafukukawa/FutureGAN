@@ -397,8 +397,12 @@ class Trainer:
                     self.fadein['D'].update_alpha(d_alpha)
                     self.complete = self.fadein['D'].alpha*100
                 self.flag_flush = False
-                self.G.module.flush_network()   # flush G
-                self.D.module.flush_network()   # flush and,
+                try:
+                    self.G.module.flush_network()   # flush G
+                    self.D.module.flush_network()   # flush and,
+                except:
+                    self.G.flush_network()
+                    self.D.flush_network()   # flush and,
                 self.fadein['G'] = None
                 self.fadein['D'] = None
                 self.complete = 0.0
@@ -409,11 +413,19 @@ class Trainer:
             # grow network.
             if floor(self.resl) != prev_resl and floor(self.resl)<self.max_resl+1:
                 self.lr = self.lr * float(self.config.lr_decay)
-                self.G.module.grow_network(floor(self.resl))
-                self.D.module.grow_network(floor(self.resl))
+                try:
+                    self.G.module.grow_network(floor(self.resl))
+                    self.D.module.grow_network(floor(self.resl))
+                except:
+                    self.G.grow_network(floor(self.resl))
+                    self.D.grow_network(floor(self.resl))
                 self.renew_everything()
-                self.fadein['G'] = [self.G.module.model.fadein_block_decode, self.G.module.model.fadein_block_encode]
-                self.fadein['D'] = self.D.module.model.fadein_block
+                try:
+                    self.fadein['G'] = [self.G.module.model.fadein_block_decode, self.G.module.model.fadein_block_encode]
+                    self.fadein['D'] = self.D.module.model.fadein_block
+                except:
+                    self.fadein['G'] = [self.G.model.fadein_block_decode, self.G.model.fadein_block_encode]
+                    self.fadein['D'] = self.D.model.fadein_block
                 self.flag_flush = True
                 self.print_model_structure()
 
@@ -441,11 +453,18 @@ class Trainer:
             print(nparams_d, file=f)
             print('--------------------------------------------------', file=f)
             print('New Generator structure: ', file=f)
-            print(self.G.module, file=f)
-            print('--------------------------------------------------', file=f)
-            print('New Discriminator structure: ', file=f)
-            print(self.D.module, file=f)
-            print('--------------------------------------------------', file=f)
+            try:
+                print(self.G.module, file=f)
+                print('--------------------------------------------------', file=f)
+                print('New Discriminator structure: ', file=f)
+                print(self.D.module, file=f)
+                print('--------------------------------------------------', file=f)
+            except:
+                print(self.G, file=f)
+                print('--------------------------------------------------', file=f)
+                print('New Discriminator structure: ', file=f)
+                print(self.D, file=f)
+                print('--------------------------------------------------', file=f)
             print(' ... models are being updated ... ')
             print(' ... saving updated model strutures to {}'.format(f))
 
