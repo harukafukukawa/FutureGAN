@@ -1,0 +1,16 @@
+- I added some try/except clauses to allow for running with just the CPU (no GPU) but it will be very slow. If things are suspiciously slow and you expect to be using a GPU, check that torch is able to find your GPU:
+
+```
+import torch
+torch.cuda.is_available() # should return True
+```
+
+- The env file originally included to create the futuregan conda env is outdated and will not work. Instead of trying to make that work, I updated the code in futuregan to work with the newest versions of necessary packages. Try running train.py and keep installing packages as you come across the need for them. If, by the time you're reading this, the newer versions of packages have become incompatible, it would likely be best to try to just update the codebase to work with the newest packages.
+
+- If you get an error that's like:
+`RuntimeError: Given groups=1, weight of size [512, 3, 1, 1, 1], expected input[32, 1, 6, 4, 4] to have 3 channels, but got 1 channels instead`
+--- if it says it expected 3 channels but got 1 channel instead, then set the flag `--nc 1` because your images are greyscale (not rgb). If your images are supposed to be rgb, make sure they actually are.
+--- if it says it expected 1 channel but got 3 channels instead, and you set `--nc 1`, then that means your images are actually rgb. Process them to be greyscale then try again.
+
+- The checkpoints can get very large (over 1GB per check point) and will fill up your disk if you're not careful. Make sure to delete unused checkpoints WHILE you train your model, and set the checkpoint saving frequency to an appropriate number. A handy command on linux for this is `ncdu`
+
